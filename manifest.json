@@ -1,0 +1,20 @@
+{
+	"manifest_version": 2,
+
+	"name": "Getting started example",
+	"description": "This extension shows a Google Image search result for the current page",
+	"version": "1.0",
+	"permissions" : [
+		"activeTab",
+		"contextMenus",
+		"clipboardWrite"
+		],
+	"content_scripts": [ {
+		"js": [ "jquery-2.1.4.min.js", "main.js" ],
+		"matches": ["http://9gag.com/*", "https://9gag.com/*"]
+	}],
+	"background": {
+		"persistent": false,
+		"scripts": ["gif.js"]
+	}
+}
