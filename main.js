@@ -7,11 +7,25 @@ jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event
 	event.preventDefault();
 });
 
-jQuery( document ).ready(function() {
+jQuery(document).ready(function() {
 	jQuery("#overlay-container").remove();
+	hash = window.location.hash.substring(1);
+	if (hash){
+		count = 0;
+		while (count < 15){
+			count++;
+			article = jQuery("article[data-entry-id='" + window.location.hash +"']");
+			if (article.length){
+				jQuery("html, body").animate({ scrollTop: jQuery("article[data-entry-id='" + hash +"']").offset().top}, 1000);
+				break;
+			}else{
+				jQuery("html, body").animate({ scrollTop: jQuery("div.loading").offset().top}, 1000);
+			}
+		}
+	}
 });
 
-$("#list-view-2").on('contextmenu', "video", function(e) {
+jQuery("#list-view-2").on('contextmenu', "video", function(e) {
 	currentVideo = jQuery(event.target);
 });
 
@@ -36,4 +50,3 @@ chrome.extension.onMessage.addListener(
 		}
 	}
 );
-
