@@ -16,7 +16,7 @@
 	}],
 	"background": {
 		"persistent": false,
-		"scripts": ["gif.js"]
+		"scripts": ["background.js"]
 	},
 	"manifest_version": 2
 }

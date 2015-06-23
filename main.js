@@ -19,11 +19,14 @@ function setLongPostListener(){
 		sidebar.html("<img>");
 		var image = jQuery("#sidebar-longPost img");
 
-		image.on('error', function(){
-			image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b.jpg");
-		});
-		
-		image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
+//		image.on('error', function(){
+//			image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
+//		});
+//		
+//		image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b.jpg");
+		jQuery.get(post.attr('href'), function(content) {
+			image.attr("src", jQuery(content).find('.badge-item-img').attr("src"));
+		})
 		// post.remove();
 
 	});
@@ -52,6 +55,18 @@ function setVideoListener(){
 		currentVideo.target = jQuery(event.target) ;
 		currentVideo.gifUrl = currentVideo.target.parent().data("image").replace("a.gif", ".gif");
 		currentVideo.name = currentVideo.target.parents("article").find("h2").text().trim() + ".gif";
+	});
+	jQuery("#list-view-2").on('contextmenu', "a", function(e) {
+		currentVideo.target = jQuery(event.target) ;
+		previous = currentVideo.target.parents("article").prev();
+		if (previous.length > 0){
+			currentVideo.permalink = "http://9gag.com/?id=" + previous.data("entry-id");
+		}else{
+			currentVideo.permalink = "http://9gag.com/?id=" + currentVideo.target.parents("article").data("entry-id");
+		}
+		if (currentVideo.permalink == undefined){
+			console.log("Warning: unable to find the permalink for this post")
+		}
 	});
 }
 
@@ -119,20 +134,25 @@ jQuery(document).ready(function() {
 	nightMode();
 	console.log("9gag Mod Successfully Loaded!");
 
-	// hash = window.location.hash.substring(1);
-	// if (hash){
-	// 	count = 0;
-	// 	while (count < 15){
-	// 		count++;
-	// 		article = jQuery("article[data-entry-id='" + window.location.hash +"']");
-	// 		if (article.length){
-	// 			jQuery("html, body").animate({ scrollTop: jQuery("article[data-entry-id='" + hash +"']").offset().top}, 1000);
-	// 			break;
-	// 		}else{
-	// 			jQuery("html, body").animate({ scrollTop: jQuery("div.loading").offset().top}, 1000);
-	// 		}
-	// 	}
-	// }
+	hash = window.location.hash.substring(1);
+	if (hash){
+		console.log(jQuery(document));
+		jQuery(document).ajaxSuccess(function() {
+			console.log("An individual AJAX call has completed successfully");
+		});
+		count = 0;
+		while (count < 150){
+			count++;
+//			console.log(count);
+			article = jQuery("article[data-entry-id='" + window.location.hash +"']");
+			if (article.length){
+				jQuery("html, body").animate({ scrollTop: jQuery("article[data-entry-id='" + hash +"']").offset().top}, 1);
+				break;
+			}else{
+				jQuery("html, body").animate({ scrollTop: jQuery("div.loading").offset().top}, 1);
+			}
+		}
+	}
 
 });
 
@@ -142,6 +162,9 @@ chrome.extension.onMessage.addListener(
 		switch (request.command){
 			case "copyGifUrl":
 				sendResponse({ url: currentVideo.gifUrl });
+				break;
+			case "copyPostPermalink":
+				sendResponse({ url: currentVideo.permalink });
 				break;
 			case "downloadGif":
 				downloadURI( currentVideo.gifUrl , currentVideo.name);

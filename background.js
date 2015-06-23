@@ -1,12 +1,13 @@
 function onClickHandler(info, tab) {
 	chrome.tabs.getSelected(null, function(tab) {
 		switch( info.menuItemId ){
+			case "copyPostPermalink":
 			case "copyGifUrl":
 				copyToClipboard( info, tab );
-			break;
+				break;
 			case "downloadGif": 
 				chrome.tabs.sendMessage(tab.id, {command: info.menuItemId});
-			break;
+				break;
 		}
 		
 	});
@@ -37,6 +38,14 @@ chrome.contextMenus.create({	"title": "Copy Gif Url",
 chrome.contextMenus.create({	"title": "Download Gif", 
 								"contexts":["video"], 
 								"id": "downloadGif",
+								"documentUrlPatterns": ["*://9gag.com/*"]
+								
+							},
+								confirmMenuCreation );
+
+chrome.contextMenus.create({	"title": "Copy post permalink", 
+								"contexts":["link"], 
+								"id": "copyPostPermalink",
 								"documentUrlPatterns": ["*://9gag.com/*"]
 								
 							},
