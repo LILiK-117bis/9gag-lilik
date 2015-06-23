@@ -13,17 +13,33 @@ function setLongPostListener(){
 	jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
 		event.preventDefault();
 		post = jQuery(event.target);
-		var image = post.parent().find("img");
-		image = jQuery(image);
+		// var image = post.parent().find("img");
+		var sidebar = jQuery("#sidebar-longPost");
+		sidebar.removeClass("closed");
+		sidebar.html("<img>");
+		var image = jQuery("#sidebar-longPost img");
+
 		image.on('error', function(){
 			image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b.jpg");
 		});
 		
 		image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
-		post.remove();
+		// post.remove();
 
 	});
 
+	jQuery(document).on('scroll', function(){
+		var sidebar = jQuery("#sidebar-longPost");
+		if( !sidebar.hasClass('closed') ){
+			sidebar.addClass('closed');
+		}
+	});
+
+}
+function setupLongPostSidebar(){
+	jQuery(".badge-page.page .main-wrap  ").after("<div id='sidebar-longPost' class='closed'></div>");
+	var pageHeight = jQuery(window).height();
+	jQuery("#sidebar-longPost").css({"height": pageHeight});
 }
 //clean wake up overlay
 function cleanWakeUp(){
@@ -54,6 +70,9 @@ function nightMode(){
 		toggleNight("on");
 	}
 
+}
+function enableSoftTransitions( element ){
+	jQuery(element).addClass("softTransitions");
 }
 
 function toggleNight( command ){
@@ -95,6 +114,8 @@ jQuery(document).ready(function() {
 	cleanWakeUp();
 	currentVideo = setupVideoObject();
 	setVideoListener();
+	enableSoftTransitions(jQuery("#container"));
+	setupLongPostSidebar();
 	nightMode();
 	console.log("9gag Mod Successfully Loaded!");
 

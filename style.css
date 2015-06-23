@@ -1,8 +1,38 @@
+.softTransitions{
+	 -webkit-transition: all .7s ease-in-out;
+}
 #container.night{
 	 background-color: white;
-	 -webkit-transition: all 0.3s ease-in-out;  /* Android 2.1+, Chrome 1-25, iOS 3.2-6.1, Safari 3.2-6  */
 	 -webkit-filter: invert(100%);
 }
 #container.night img, #container.night video{
 	-webkit-filter: invert(100%);
+}
+#sidebar-longPost{
+	overflow-y: scroll;
+	float: left;
+	position: fixed;
+	height: 70%;
+	width: 40%;
+	right: 0px;
+	background-color: #333;
+	z-index: 9999;
+	padding: 20px;
+
+
+}
+#sidebar-longPost *{
+	box-sizing: border-box;
+}
+#sidebar-longPost img{
+	width: 100%;
+	padding-bottom: 700px;
+}
+#sidebar-longPost.closed, .closed{
+	width: 0px;
+	background: white;
+
+}
+.hidden{
+	display: none;
 }
