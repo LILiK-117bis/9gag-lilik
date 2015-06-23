@@ -11,7 +11,8 @@
 		],
 	"content_scripts": [ {
 		"js": [ "jquery-2.1.4.min.js", "main.js" ],
-		"matches": ["http://9gag.com/*", "https://9gag.com/*"]
+		"matches": ["http://9gag.com/*", "https://9gag.com/*"],
+		"css": ["style.css"] 
 	}],
 	"background": {
 		"persistent": false,

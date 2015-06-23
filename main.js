@@ -42,6 +42,19 @@ function downloadURI(uri, name){
 	link.click();
 }
 
+//night mode
+function nightMode(){
+	if( isNightTime() ){
+		var container = jQuery('#container');
+		container.addClass("night");
+
+	}
+
+}
+function isNightTime(){
+	return true;
+}
+
 //init everything
 jQuery(document).ready(function() {
 
@@ -49,6 +62,7 @@ jQuery(document).ready(function() {
 	cleanWakeUp();
 	currentVideo = setupVideoObject();
 	setVideoListener();
+	nightMode();
 	console.log("9gag Mod Successfully Loaded!");
 
 	// hash = window.location.hash.substring(1);
