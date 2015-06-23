@@ -134,9 +134,24 @@ function isNightTime(){
 		return false;
 }	
 
+function showNSFW(){
+	jQuery(".badge-nsfw-entry-cover").each(function() {
+		jQuery(this).addClass("deobfuscated");
+		jQuery(this).html(jQuery('<img/>', {src: "http://img-9gag-fun.9cache.com/photo/" + jQuery(this).parents("article").data("entry-id") + "_460s.jpg",}));
+	});
+}
+
 //init everything
 jQuery(document).ready(function() {
-
+	updatingDom = false;
+	showNSFW();
+	jQuery(".main-wrap").on("DOMNodeInserted", function() {
+		if (!jQuery("#jsid-upload-menu").not(".deobfuscated").is(":visible") && !updatingDom){
+			updatingDom = true;
+			showNSFW();
+			updatingDom = false;
+		}
+	});
 	setLongPostListener();
 	cleanWakeUp();
 	currentVideo = setupVideoObject();
