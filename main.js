@@ -2,10 +2,12 @@ function setupVideoObject(){
 	return {
 		target: null, 
 		gifUrl: null,
-		name: null
+		name: null,
+		permalink: null
 	};
 
 }
+
 function setLilikLogo(){
 	console.log(chrome.extension.getURL("assets/logo100.png"));
 	jQuery(" header#top-nav a.logo").css({
@@ -22,21 +24,14 @@ function setLongPostListener(){
 	jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
 		event.preventDefault();
 		post = jQuery(event.target);
-		// var image = post.parent().find("img");
 		var sidebar = jQuery("#sidebar-longPost");
 		sidebar.removeClass("closed");
 		sidebar.html("<img>");
 		var image = jQuery("#sidebar-longPost img");
 
-//		image.on('error', function(){
-//			image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
-//		});
-//		
-//		image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b.jpg");
 		jQuery.get(post.attr('href'), function(content) {
 			image.attr("src", jQuery(content).find('.badge-item-img').attr("src"));
 		})
-		// post.remove();
 
 	});
 
@@ -67,12 +62,14 @@ function setVideoListener(){
 	});
 	jQuery("#list-view-2").on('contextmenu', "a", function(e) {
 		currentVideo.target = jQuery(event.target) ;
-		previous = currentVideo.target.parents("article").prev();
+		var previous = currentVideo.target.parents("article").prev();
+		var id = currentVideo.target.parents("article").data("entry-id");
+
 		if (previous.length > 0){
-			currentVideo.permalink = "http://9gag.com/?id=" + previous.data("entry-id");
-		}else{
-			currentVideo.permalink = "http://9gag.com/?id=" + currentVideo.target.parents("article").data("entry-id");
+			id = previous.data("entry-id");
 		}
+
+		cur
 		if (currentVideo.permalink == undefined){
 			console.log("Warning: unable to find the permalink for this post")
 		}
