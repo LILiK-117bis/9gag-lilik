@@ -9,7 +9,6 @@ function setupVideoObject(){
 }
 
 function setLilikLogo(){
-	console.log(chrome.extension.getURL("assets/logo100.png"));
 	jQuery(" header#top-nav a.logo").css({
 						"background-image": "url("+chrome.extension.getURL("assets/logo100.png")+")",
 						"background-repeat": "no-repeat",
@@ -20,7 +19,6 @@ function setLilikLogo(){
 
 //roll out long post in home page:
 function setLongPostListener(){
-
 	jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
 		event.preventDefault();
 		post = jQuery(event.target);
@@ -50,17 +48,24 @@ function setupLongPostSidebar(){
 }
 //clean wake up overlay
 function cleanWakeUp(){
-	jQuery("#overlay-container").remove();
+//	jQuery('head').append('<script type="text/javascript">GAG.Configs._configs.configs.idlePopupIdleTime = 9007199254740991; clearTimeout(GAG.PageController._idlePopupTimer); </script>');
+// 31556926000 = 1 year in ms.
+var code = ['GAG.Configs._configs.configs.idlePopupIdleTime = 31556926000; clearTimeout(GAG.PageController._idlePopupTimer);'].join('\n');
+var script = document.createElement('script');
+script.textContent = code;
+(document.head||document.documentElement).appendChild(script);
+script.parentNode.removeChild(script);
 }
 
 //set a listener to videos right click
 function setVideoListener(){
-	jQuery("#list-view-2").on('contextmenu', "video", function(e) {
-		currentVideo.target = jQuery(event.target) ;
+	jQuery(".main-wrap").on('contextmenu', "video", function(e) {
+		console.log(event.target);
+		currentVideo.target = jQuery(event.target);
 		currentVideo.gifUrl = currentVideo.target.parent().data("image").replace("a.gif", ".gif");
 		currentVideo.name = currentVideo.target.parents("article").find("h2").text().trim() + ".gif";
 	});
-	jQuery("#list-view-2").on('contextmenu', "a", function(e) {
+	jQuery(".main-wrap").on('contextmenu', "a", function(e) {
 		currentVideo.target = jQuery(event.target) ;
 		var previous = currentVideo.target.parents("article").prev();
 		var id = currentVideo.target.parents("article").data("entry-id");
@@ -75,7 +80,6 @@ function setVideoListener(){
 		}
 	});
 }
-
 
 //download url 
 function downloadURI(uri, name){
@@ -92,6 +96,7 @@ function nightMode(){
 	}
 
 }
+
 function enableSoftTransitions( element ){
 	jQuery(element).addClass("softTransitions");
 }
@@ -141,29 +146,7 @@ jQuery(document).ready(function() {
 	nightMode();
 	setLilikLogo();
 	console.log("9gag Mod Successfully Loaded!");
-
-	hash = window.location.hash.substring(1);
-	if (hash){
-		console.log(jQuery(document));
-		jQuery(document).ajaxSuccess(function() {
-			console.log("An individual AJAX call has completed successfully");
-		});
-		count = 0;
-		while (count < 150){
-			count++;
-//			console.log(count);
-			article = jQuery("article[data-entry-id='" + window.location.hash +"']");
-			if (article.length){
-				jQuery("html, body").animate({ scrollTop: jQuery("article[data-entry-id='" + hash +"']").offset().top}, 1);
-				break;
-			}else{
-				jQuery("html, body").animate({ scrollTop: jQuery("div.loading").offset().top}, 1);
-			}
-		}
-	}
-
 });
-
 
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -180,6 +163,3 @@ chrome.extension.onMessage.addListener(
 		}
 	}
 );
-
-
-
