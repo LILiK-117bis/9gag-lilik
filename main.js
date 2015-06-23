@@ -12,9 +12,9 @@ function setLongPostListener(){
 
 	jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
 		event.preventDefault();
-		actual = jQuery(event.target);
-		actual.parent().find("img").attr("src", actual.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
-		actual.remove();
+		post = jQuery(event.target);
+		post.parent().find("img").attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
+		post.remove();
 
 	});
 
@@ -51,20 +51,20 @@ jQuery(document).ready(function() {
 	setVideoListener();
 	console.log("9gag Mod Successfully Loaded!");
 
-	hash = window.location.hash.substring(1);
-	if (hash){
-		count = 0;
-		while (count < 15){
-			count++;
-			article = jQuery("article[data-entry-id='" + window.location.hash +"']");
-			if (article.length){
-				jQuery("html, body").animate({ scrollTop: jQuery("article[data-entry-id='" + hash +"']").offset().top}, 1000);
-				break;
-			}else{
-				jQuery("html, body").animate({ scrollTop: jQuery("div.loading").offset().top}, 1000);
-			}
-		}
-	}
+	// hash = window.location.hash.substring(1);
+	// if (hash){
+	// 	count = 0;
+	// 	while (count < 15){
+	// 		count++;
+	// 		article = jQuery("article[data-entry-id='" + window.location.hash +"']");
+	// 		if (article.length){
+	// 			jQuery("html, body").animate({ scrollTop: jQuery("article[data-entry-id='" + hash +"']").offset().top}, 1000);
+	// 			break;
+	// 		}else{
+	// 			jQuery("html, body").animate({ scrollTop: jQuery("div.loading").offset().top}, 1000);
+	// 		}
+	// 	}
+	// }
 
 });
 

@@ -1,8 +1,20 @@
 function onClickHandler(info, tab) {
 	chrome.tabs.getSelected(null, function(tab) {
-		if (info.menuItemId == "copyGifUrl"){
-			chrome.tabs.sendMessage(tab.id, {command: info.menuItemId}, function(response) {
-				console.log(response.url);
+		switch( info.menuItemId ){
+			case "copyGifUrl":
+				copyToClipboard( info, tab );
+			break;
+			case "downloadGif": 
+				chrome.tabs.sendMessage(tab.id, {command: info.menuItemId});
+			break;
+		}
+		
+	});
+}
+
+function copyToClipboard(info, tab){
+
+	chrome.tabs.sendMessage(tab.id, {command: info.menuItemId}, function(response) {
 					var urlTextArea = document.createElement('textarea');
 					urlTextArea.value = response.url;
 					document.body.appendChild(urlTextArea);
@@ -10,19 +22,26 @@ function onClickHandler(info, tab) {
 					document.execCommand('copy');
 					document.body.removeChild(urlTextArea);
 			});
-		}else if (info.menuItemId == "downloadGif"){
-			chrome.tabs.sendMessage(tab.id, {command: info.menuItemId});
-		}
-	});
-}
 
+}
 chrome.contextMenus.onClicked.addListener(onClickHandler);
 
-chrome.runtime.onInstalled.addListener(function() {
-	chrome.contextMenus.create({"title": "Copy Gif Url", "contexts": ["video"],
-															"id": "copyGifUrl",
-															"documentUrlPatterns": ["*://9gag.com/"]});
-	chrome.contextMenus.create({"title": "Download Gif", "contexts": ["video"],
-															"id": "downloadGif",
-															"documentUrlPatterns": ["*://9gag.com/"]});
-});
+chrome.contextMenus.create({	"title": "Copy Gif Url", 
+								"contexts":["video"], 
+								"id": "copyGifUrl",
+								"documentUrlPatterns": ["*://9gag.com/*"]
+
+							},
+								confirmMenuCreation );
+
+chrome.contextMenus.create({	"title": "Download Gif", 
+								"contexts":["video"], 
+								"id": "downloadGif",
+								"documentUrlPatterns": ["*://9gag.com/*"]
+								
+							},
+								confirmMenuCreation );
+
+function confirmMenuCreation(){
+	// console.log("Created context menu");
+}

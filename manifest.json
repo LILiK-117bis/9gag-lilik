@@ -1,5 +1,5 @@
 {
-	"manifest_version": 2,
+	
 
 	"name": "9GAG lilik mod",
 	"description": "Mod to make 9gag a better place",
@@ -16,5 +16,6 @@
 	"background": {
 		"persistent": false,
 		"scripts": ["gif.js"]
-	}
+	},
+	"manifest_version": 2
 }
