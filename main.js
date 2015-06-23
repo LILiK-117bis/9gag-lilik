@@ -13,7 +13,13 @@ function setLongPostListener(){
 	jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
 		event.preventDefault();
 		post = jQuery(event.target);
-		post.parent().find("img").attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
+		var image = post.parent().find("img");
+		image = jQuery(image);
+		image.on('error', function(){
+			image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b.jpg");
+		});
+		
+		image.attr("src", post.attr('href').replace("/gag/", "http://img-9gag-fun.9cache.com/photo/") + "_700b_v1.jpg");
 		post.remove();
 
 	});
@@ -45,15 +51,42 @@ function downloadURI(uri, name){
 //night mode
 function nightMode(){
 	if( isNightTime() ){
-		var container = jQuery('#container');
-		container.addClass("night");
-
+		toggleNight("on");
 	}
 
 }
-function isNightTime(){
-	return true;
+
+function toggleNight( command ){
+	nightClass = "night";
+	var container = jQuery('#container');
+
+	if( command ){
+		switch( command ){
+			case 'on':
+				container.addClass( nightClass );
+			break;
+			case 'off':
+				container.removeClass( nightClass );
+			break;
+		}
+	}else{
+
+		if( container.hasClass( nightClass ) ){
+			toggleNight("off");
+		}else{
+			toggleNight("on");
+		}
+	}
 }
+function isNightTime(){
+	var nightHour = 19;
+	var date = new Date();
+	var hours = date.getHours();
+	if( hours > nightHour )
+		return true;
+	else
+		return false;
+}	
 
 //init everything
 jQuery(document).ready(function() {
