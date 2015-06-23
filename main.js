@@ -68,8 +68,8 @@ function setVideoListener(){
 		if (previous.length > 0){
 			id = previous.data("entry-id");
 		}
-
-		cur
+		currentVideo.permalink = "http://9gag.com/?id=" + id;
+		
 		if (currentVideo.permalink == undefined){
 			console.log("Warning: unable to find the permalink for this post")
 		}
@@ -120,9 +120,10 @@ function toggleNight( command ){
 }
 function isNightTime(){
 	var nightHour = 19;
+	var morningHour = 7;
 	var date = new Date();
 	var hours = date.getHours();
-	if( hours >= nightHour )
+	if( hours >= nightHour || hours <= morningHour)
 		return true;
 	else
 		return false;

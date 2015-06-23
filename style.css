@@ -5,14 +5,6 @@ header#top-nav a.logo{
 	-webkit-animation: rotate 15s infinite linear;
 	border-right: none !important;
 }
-@-webkit-keyframes rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to { 
-    -webkit-transform: rotate(360deg);
-  }
-}
 
 #container.night{
 	 background-color: white;
@@ -48,4 +40,15 @@ header#top-nav a.logo{
 }
 .hidden{
 	display: none;
+}
+
+/* animations */
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
 }
