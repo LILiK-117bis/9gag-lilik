@@ -101,7 +101,7 @@ function isNightTime(){
 	var nightHour = 19;
 	var date = new Date();
 	var hours = date.getHours();
-	if( hours > nightHour )
+	if( hours >= nightHour )
 		return true;
 	else
 		return false;
