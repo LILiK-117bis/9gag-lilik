@@ -16,7 +16,7 @@
 	}],
 	"background": {
 		"persistent": false,
-		"scripts": ["gif.js"]
+		"scripts": ["background.js"]
 	},
 	"web_accessible_resources": ["assets/logo100.png"],
 	"icons": { "16": "assets/logoDark16.png",
