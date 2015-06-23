@@ -18,5 +18,9 @@
 		"persistent": false,
 		"scripts": ["gif.js"]
 	},
+	"web_accessible_resources": ["assets/logo100.png"],
+	"icons": { "16": "assets/logoDark16.png",
+           "48": "assets/logoDark48.png",
+          "128": "assets/logoDark128.png" },
 	"manifest_version": 2
 }

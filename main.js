@@ -6,6 +6,15 @@ function setupVideoObject(){
 	};
 
 }
+function setLilikLogo(){
+	console.log(chrome.extension.getURL("assets/logo100.png"));
+	jQuery(" header#top-nav a.logo").css({
+						"background-image": "url("+chrome.extension.getURL("assets/logo100.png")+")",
+						"background-repeat": "no-repeat",
+						"background-size": "30px 30px"
+
+					});
+}
 
 //roll out long post in home page:
 function setLongPostListener(){
@@ -117,6 +126,7 @@ jQuery(document).ready(function() {
 	enableSoftTransitions(jQuery("#container"));
 	setupLongPostSidebar();
 	nightMode();
+	setLilikLogo();
 	console.log("9gag Mod Successfully Loaded!");
 
 	// hash = window.location.hash.substring(1);

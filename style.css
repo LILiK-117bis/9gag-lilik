@@ -1,6 +1,19 @@
 .softTransitions{
 	 -webkit-transition: all .7s ease-in-out;
 }
+header#top-nav a.logo{
+	-webkit-animation: rotate 15s infinite linear;
+	border-right: none !important;
+}
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
 #container.night{
 	 background-color: white;
 	 -webkit-filter: invert(100%);
