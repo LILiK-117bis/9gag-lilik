@@ -19,10 +19,10 @@ function onClickHandler(info, tab) {
 chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 chrome.runtime.onInstalled.addListener(function() {
-	chrome.contextMenus.create({"title": "Copy gif url to clipboard", "contexts": ["video"],
+	chrome.contextMenus.create({"title": "Copy Gif Url", "contexts": ["video"],
 															"id": "copyGifUrl",
 															"documentUrlPatterns": ["*://9gag.com/"]});
-	chrome.contextMenus.create({"title": "Download gif file", "contexts": ["video"],
+	chrome.contextMenus.create({"title": "Download Gif", "contexts": ["video"],
 															"id": "downloadGif",
 															"documentUrlPatterns": ["*://9gag.com/"]});
 });
