@@ -66,14 +66,14 @@ function setVideoListener(){
 		currentVideo.name = currentVideo.target.parents("article").find("h2").text().trim() + ".gif";
 	});
 	jQuery(".main-wrap").on('contextmenu', "a", function(e) {
-		currentVideo.target = jQuery(event.target) ;
+		currentVideo.target = jQuery(event.target);
 		var previous = currentVideo.target.parents("article").prev();
 		var id = currentVideo.target.parents("article").data("entry-id");
 
 		if (previous.length > 0){
 			id = previous.data("entry-id");
 		}
-		currentVideo.permalink = "http://9gag.com/?id=" + id;
+		currentVideo.permalink = [location.protocol, '//', location.host, location.pathname].join('') + "?id=" + id;
 		
 		if (currentVideo.permalink == undefined){
 			console.log("Warning: unable to find the permalink for this post")
