@@ -18,7 +18,7 @@
 		"persistent": false,
 		"scripts": ["background.js"]
 	},
-	"web_accessible_resources": ["assets/logo100.png"],
+	"web_accessible_resources": ["assets/logo100.png", "style.css"],
 	"icons": { "16": "assets/logoDark16.png",
            "48": "assets/logoDark48.png",
           "128": "assets/logoDark128.png" },

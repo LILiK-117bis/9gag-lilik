@@ -126,6 +126,9 @@ function enableSoftTransitions( element ){
 //night mode
 function nightMode(){
 
+	if( hasComments())
+		setInvertCommentImages();
+
 	if( isNightTime() ){
 		toggleNight("on");
 	}
@@ -143,19 +146,31 @@ function isNightTime(){
 	else
 		return false;
 }	
+function hasComments(){
+	return jQuery("#gcomment-widget-jsid-comment-sys").length;
+}
 
 function toggleNight( command ){
 
 	nightClass = "night";
 	var container = jQuery('#container');
 
+	if( hasComments())
+		var commentPosts = frames['gcomment-widget-jsid-comment-sys'].document.getElementsByClassName("post-comment")[0];
+
+
 	if( command ){
 		switch( command ){
 			case 'on':
 				container.addClass( nightClass );
+					if( hasComments())
+						addClass( commentPosts, nightClass );
 			break;
 			case 'off':
 				container.removeClass( nightClass );
+					if( hasComments())
+						removeClass( commentPosts, nightClass );
+
 			break;
 		}
 	}else{
@@ -166,6 +181,17 @@ function toggleNight( command ){
 			toggleNight("on");
 		}
 	}
+}
+
+function setInvertCommentImages(){
+	// jQuery( "img", frames['gcomment-widget-jsid-comment-sys'].document ).css({"-webkit-filter" : "invert(100%)"});
+	
+	var cssLink = document.createElement("link") 
+	cssLink.href = chrome.extension.getURL("style.css");
+	cssLink.rel = "stylesheet"; 
+	cssLink.type = "text/css"; 	
+	frames['gcomment-widget-jsid-comment-sys'].document.body.appendChild(cssLink);
+
 }
 
 function showNSFW(){
@@ -187,6 +213,7 @@ function NSFWListener(){
 	}
 }
 //init everything
+
 jQuery(document).ready(function() {
 	updatingDom = false;
 	showNSFW();
@@ -203,7 +230,6 @@ jQuery(document).ready(function() {
 	enableSoftTransitions(jQuery("#container"));
 
 	setupSidebar();
-
 
 	nightMode();
 	setLilikLogo();
@@ -226,3 +252,19 @@ chrome.extension.onMessage.addListener(
 		}
 	}
 );
+
+// javascript utils to manipulate classes:
+// necessary to hack the comments css
+
+function hasClass(ele,cls) {
+    return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+}
+function addClass(ele,cls) {
+    if (!this.hasClass(ele,cls)) ele.className += " "+cls;
+}
+function removeClass(ele,cls) {
+    if (hasClass(ele,cls)) {
+        var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+        ele.className=ele.className.replace(reg,' ');
+    }
+}

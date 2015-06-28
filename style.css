@@ -38,6 +38,12 @@ header#top-nav a.logo{
 	background: none;
 
 }
+/*comments*/
+
+.post-comment.night img{
+	-webkit-filter: invert(100%);
+}
+
 .hidden{
 	display: none;
 }
