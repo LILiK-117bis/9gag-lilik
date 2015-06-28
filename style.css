@@ -13,7 +13,7 @@ header#top-nav a.logo{
 #container.night img, #container.night video{
 	-webkit-filter: invert(100%);
 }
-#sidebar-longPost{
+#sidebar-content-mod{
 	overflow-y: scroll;
 	float: left;
 	position: fixed;
@@ -26,16 +26,16 @@ header#top-nav a.logo{
 
 
 }
-#sidebar-longPost *{
+#sidebar-content-mod *{
 	box-sizing: border-box;
 }
-#sidebar-longPost img{
+#sidebar-content-mod img{
 	width: 100%;
 	padding-bottom: 700px;
 }
-#sidebar-longPost.closed, .closed{
+#sidebar-content-mod.closed, .closed{
 	width: 0px;
-	background: white;
+	background: none;
 
 }
 .hidden{
