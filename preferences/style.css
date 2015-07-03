@@ -1,0 +1,46 @@
+body{
+	background: #333;
+	color: #efefef;
+	margin: 0;
+	padding: 0;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-weight: 300;
+
+}
+body > *{
+	width: 90%;
+	margin: 0 auto;
+}
+header{
+	overflow: hidden;
+	padding-top: 20px;
+}
+header > *{
+	float: left;
+	vertical-align: middle;
+}
+header h1{
+	font-size: 50px;
+	font-weight: 100;
+	margin-left: 10px;
+}
+section.container{
+	clear:	both;
+}
+table{
+	width: 100%;
+	font-size: 18px;
+	font-weight: 100;
+	letter-spacing: 0.02em;
+}
+
+table tr:nth-child(2n+1){
+	background-color: #666;
+
+}
+table thead tr td{
+	background-color: #222;
+}
+table td{
+	padding: 5px;
+}

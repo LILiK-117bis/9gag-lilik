@@ -1,13 +1,15 @@
 {
 	
 
-	"name": "9GAG lilik mod",
+	"name": "9GAG LILiK Mod",
 	"description": "Mod to make 9gag a better place",
 	"version": "1.0",
+	"options_page":"preferences/preferences.html",
 	"permissions" : [
 		"activeTab",
 		"contextMenus",
-		"clipboardWrite"
+		"clipboardWrite",
+		"storage"
 		],
 	"content_scripts": [ {
 		"js": [ "jquery-2.1.4.min.js", "main.js" ],
