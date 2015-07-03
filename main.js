@@ -76,7 +76,7 @@ function setVideoListener(){
 
 	jQuery(".main-wrap").on('contextmenu', "video", function(e) {
 		currentVideo.target = jQuery(event.target);
-		currentVideo.gifUrl = currentVideo.target.parent().data("image").replace("a.gif", ".gif");
+		currentVideo.gifUrl = currentVideo.target.parent().data("image");
 		currentVideo.name = currentVideo.target.parents("article").find("h2").text().trim() + ".gif";
 	});
 
