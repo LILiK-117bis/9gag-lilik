@@ -38,9 +38,30 @@ table tr:nth-child(2n+1){
 	background-color: #666;
 
 }
-table thead tr td{
+table tr:nth-child(2n){
+	background-color: #444;
+
+}
+table .description{
+	font-size: 12px;
+	font-style: italic;
+	padding-left: 5px;
+}
+table > thead > tr > td{
 	background-color: #222;
+}
+table > thead > tr > td:first-child{
+	width: 70%;
+}
+table td:nth-child(2) > *:nth-child(odd){
+	float: left;
+	clear: left;
+}
+table td:nth-child(2) > *:nth-child(even){
+	float: left;
+	clear: none;
 }
 table td{
 	padding: 5px;
+
 }
