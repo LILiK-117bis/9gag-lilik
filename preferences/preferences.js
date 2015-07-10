@@ -1,10 +1,16 @@
 var settings = [
 	{
+		id: "long_post_visualization_enabler",
+		name: "Long Post Visualization Mod Enabler",
+		description: "Enable long post mod?",
+		type: "checkbox",
+		
+	},{
 		id: "long_post_visualization",
 		name: "Long Post Visualization",
 		description: "Select which way you prefer to display long posts",
 		type: "radio",
-		options: [ "Sidebar", "In place"]
+		options: [ "Sidebar" ]
 	},{
 		id: "night_mode_enabler",	
 		name: "Night Mode",

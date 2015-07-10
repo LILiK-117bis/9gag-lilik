@@ -7,14 +7,14 @@ function setupVideoObject(){
 	};
 
 }
+
 // not actually working:
-// function getSetting( setting ){
-// 	var value = "";
-// 	var value = chrome.storage.sync.get( setting, function(obj){
-// 		value =  obj[setting];
-// 	});
-// 	return value;
-// }
+function getSettings( setting ){
+	var value = chrome.storage.sync.get( setting, function(obj){
+		settings =  obj;
+		initExtension();
+	});
+}
 
 function setLilikLogo(){
 	jQuery(" header#top-nav a.logo").css({
@@ -28,30 +28,34 @@ function setLilikLogo(){
 
 //roll out long post in home page:
 function setLongPostListener(){
-	jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
-		event.preventDefault();
-		
-		post = jQuery(event.target);
-		
-		var sidebar = jQuery("#sidebar-content-mod");
-		sidebar.removeClass("closed");
-		sidebar.html("<img>");
-		
-		var image = jQuery("#sidebar-content-mod img");
+	if( settings.long_post_visualization == "Sidebar" && settings.long_post_visualization_enabler){
 
-		jQuery.get( post.attr('href'), function(content) {
-			image.attr("src", jQuery(content).find('.badge-item-img').attr("src"));
+		jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
+			event.preventDefault();
+			
+			post = jQuery(event.target);
+			
+			var sidebar = jQuery("#sidebar-content-mod");
+			sidebar.removeClass("closed");
+			sidebar.html("<img>");
+			
+			var image = jQuery("#sidebar-content-mod img");
+
+			jQuery.get( post.attr('href'), function(content) {
+				image.attr("src", jQuery(content).find('.badge-item-img').attr("src"));
+			});
+
 		});
 
-	});
+		jQuery(document).on('scroll', function(){
 
-	jQuery(document).on('scroll', function(){
-
-		var sidebar = jQuery("#sidebar-content-mod");
-		if( !sidebar.hasClass('closed') ){
-			sidebar.addClass('closed');
-		}
-	});
+			var sidebar = jQuery("#sidebar-content-mod");
+			if( !sidebar.hasClass('closed') ){
+				sidebar.addClass('closed');
+			}
+		});
+		
+	}
 
 }
 
@@ -133,19 +137,26 @@ function enableSoftTransitions( element ){
 
 //night mode
 function nightMode(){
-
+	console.dir(settings.night_mode_enabler);
 	if( hasComments())
 		setInvertCommentImages();
 
-	if( isNightTime()){
+	if( isNightTime() && settings.night_mode_enabler ){
 		toggleNight("on");
 	}
 
 }
 
 function isNightTime(){
+
 	var nightHour = 19;
 	var morningHour = 7;
+	if( typeof settings.night_mode_starting_hour != "undefined" ){
+		nightHour = settings.night_mode_starting_hour;
+	}
+	if( typeof settings.night_mode_ending_hour != "undefined"){
+		morningHour = settings.night_mode_ending_hour;
+	}
 
 	// if( getSetting("night_mode_starting_hour") ){
 	// 	nightHour = getSetting("night_mode_starting_hour");
@@ -229,6 +240,11 @@ function NSFWListener(){
 
 jQuery(document).ready(function() {
 	updatingDom = false;
+	getSettings();
+	
+});
+
+function initExtension(){
 	showNSFW();
 	
 	setOnNewNodeListener();
@@ -248,8 +264,7 @@ jQuery(document).ready(function() {
 	setLilikLogo();
 	
 	console.log("9gag Mod Successfully Loaded!");
-});
-
+}
 chrome.extension.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		switch (request.command){
