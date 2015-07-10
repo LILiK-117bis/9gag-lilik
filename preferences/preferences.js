@@ -4,18 +4,23 @@ var settings = [
 		name: "Long Post Visualization Mod Enabler",
 		description: "Enable long post mod?",
 		type: "checkbox",
+		defaultValue: "true"
 		
 	},{
 		id: "long_post_visualization",
 		name: "Long Post Visualization",
 		description: "Select which way you prefer to display long posts",
 		type: "radio",
-		options: [ "Sidebar" ]
+		options: [ "Sidebar" ],
+		defaultValue: "Sidebar"
+
 	},{
 		id: "night_mode_enabler",	
 		name: "Night Mode",
 		description: "Enable or disable night mode",
-		type: "checkbox"
+		type: "checkbox",
+		defaultValue: "true"
+
 	},{
 		id: "night_mode_starting_hour",
 		name: "Night Mode Starting Hour",
@@ -24,7 +29,9 @@ var settings = [
 		options: {
 			min: "0",
 			max: "24"
-		} 
+		},
+		defaultValue: "19"
+ 
 	},{
 		id: "night_mode_ending_hour",
 		name: "Night Mode Ending Hour",
@@ -33,7 +40,9 @@ var settings = [
 		options: {
 			min: "0",
 			max: "24"
-		} 
+		},
+		defaultValue: "7"
+
 	}
 
 ];
@@ -199,35 +208,47 @@ function loadSettings( ){
 }
 
 function updateSettings( storedSettings ){
+	var displayedSettings = document.getElementsByClassName('setting');
+	for (var i = displayedSettings.length - 1; i >= 0; i--) {
 
-	for( var settingId in storedSettings ){
-		settingId = String( settingId );
+		var settingId = displayedSettings[i].id.split(/_(.+)?/)[1];
 
-		settingObject = document.getElementById( "setting_"+settingId );
-		if( typeof settingObject != "undefined" && settingObject != null){
+		var settingObject = displayedSettings[i];
 
-			type = settingObject.getAttribute('data-type');
+		var type = settingObject.getAttribute('data-type');
 
-			switch( type ){
-				case ( "checkbox" ):
-					settingObject.childNodes[1].childNodes[0].checked = storedSettings[settingId];
-				break;
-				case ( "radio" ):
-					document.getElementById( "radio_"+ settingId +"_"+ storedSettings[settingId] ).checked = true;
-				break;
-				case "range":
-					settingObject.childNodes[1].childNodes[0].value = storedSettings[settingId];
-					updateRangeValueLabel( settingId , storedSettings[settingId] );
-				break;
-
-				case "text":
-				case "dropdown":
-					settingObject.childNodes[1].childNodes[0].value = storedSettings[settingId];
-				break;
-			}
-			
+		var settingValue = settings[i].defaultValue;
+		if( storedSettings[ settingId ] ){
+			settingValue = storedSettings[settingId];
 		}
-	}
+		switch( type ){
+			case ( "checkbox" ):
+				settingObject.childNodes[1].childNodes[0].checked = settingValue;
+			break;
+			case ( "radio" ):
+				document.getElementById( "radio_"+ settingId +"_"+ settingValue ).checked = true;
+			break;
+			case "range":
+				settingObject.childNodes[1].childNodes[0].value = settingValue;
+				updateRangeValueLabel( settingId , settingValue );
+			break;
+
+			case "text":
+			case "dropdown":
+				settingObject.childNodes[1].childNodes[0].value = settingValue;
+			break;
+		}
+
+	};
+	// for( var settingId in storedSettings ){
+	// 	settingId = String( settingId );
+
+	// 	settingObject = document.getElementById( "setting_"+settingId );
+	// 	if( typeof settingObject != "undefined" && settingObject != null){
+
+			
+	// 	}
+	// }
 	
 }
 
