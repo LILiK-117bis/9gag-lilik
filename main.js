@@ -7,6 +7,14 @@ function setupVideoObject(){
 	};
 
 }
+// not actually working:
+// function getSetting( setting ){
+// 	var value = "";
+// 	var value = chrome.storage.sync.get( setting, function(obj){
+// 		value =  obj[setting];
+// 	});
+// 	return value;
+// }
 
 function setLilikLogo(){
 	jQuery(" header#top-nav a.logo").css({
@@ -129,16 +137,21 @@ function nightMode(){
 	if( hasComments())
 		setInvertCommentImages();
 
-	if( isNightTime() ){
+	if( isNightTime()){
 		toggleNight("on");
 	}
 
 }
 
 function isNightTime(){
-
 	var nightHour = 19;
 	var morningHour = 7;
+
+	// if( getSetting("night_mode_starting_hour") ){
+	// 	nightHour = getSetting("night_mode_starting_hour");
+	// 	console.log(nightHour);
+	// }
+
 	var date = new Date();
 	var hours = date.getHours();
 	if( hours >= nightHour || hours <= morningHour)
