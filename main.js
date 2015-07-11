@@ -95,11 +95,9 @@ function setupSidebar(){
 
 //clean wake up overlay
 function cleanWakeUp(){
-	var code = 'GAG.Configs._configs.configs.idlePopupIdleTime = 2147483647; clearTimeout(GAG.PageController._idlePopupTimer);';
-	var s = document.createElement('script');
-	s.type = "text/javascript";
-	s.textContent = code;
-	(document.head||document.documentElement).appendChild(s);
+	if (settings.disable_wakeup_enabler) {
+		executeScriptOnPage('GAG.Configs._configs.configs.idlePopupIdleTime = 2147483647; clearTimeout(GAG.PageController._idlePopupTimer);');
+	}
 }
 
 //set a listener to videos right click
@@ -290,6 +288,29 @@ function showVideoControlsPost(e){
 		});
 	}
 }
+
+function toogleZoom(){
+	if (settings.toogle_zoom_enabler) {
+		$('html').keydown(function(e){
+			switch (e.keyCode){
+				case 74:
+				case 75:
+				case 90:
+					if (jQuery("#jsid-modal-post-zoom").is(':visible')){
+						executeScriptOnPage('jQuery("a.badge-overlay-close.close-button").click();');
+					}else if (e.keyCode == 90){
+						var a = jQuery('article.badge-in-view.badge-in-view-focus').first().find('a').first();
+						//a.click(function(e){e.preventDefault();});
+						a.addClass("badge-post-zoom zoomable");
+						executeScriptOnPage('jQuery("article.badge-in-view.badge-in-view-focus").first().find("a").first().click()');
+						a.removeClass("badge-post-zoom zoomable");
+					}
+					break;
+			}
+		});
+	}
+}
+
 //init everything
 
 jQuery(document).ready(function() {
@@ -304,32 +325,9 @@ function initExtension(){
 	setOnNewNodeListener();
 	setOnWindowResizeListener();
 	setLongPostListener();
+	toogleZoom();
 
-	if (settings.disable_wakeup_enabler) {
-		cleanWakeUp();
-	}
-
-$('html').keydown(function(e){
-	switch (e.keyCode){
-		case 90:
-			if (jQuery("#jsid-modal-post-zoom").is(':visible')){
-				var code = 'jQuery("a.badge-overlay-close.close-button").click();';
-				var s = document.createElement('script');
-				s.type = "text/javascript";
-				s.textContent = code;
-			(document.head||document.documentElement).appendChild(s);
-			}else{
-				var a = jQuery('article.badge-in-view.badge-in-view-focus').first().find('a');
-				a.click(function(e){e.preventDefault();});
-				a.addClass("badge-post-zoom zoomable");
-				a.click();
-//				if (img.hasClass('badge-post-zoom zoomable')){
-//					img.click().removeClass("badge-post-zoom zoomable");
-//				}
-			}
-			break;
-	}
-});
+	cleanWakeUp();
 
 	// TODO: this object is not in the right place:
 	currentVideo = setupVideoObject();
@@ -374,4 +372,11 @@ function removeClass(ele,cls) {
         var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
         ele.className=ele.className.replace(reg,' ');
     }
+}
+
+function executeScriptOnPage(code){
+	var s = document.createElement('script');
+	s.type = "text/javascript";
+	s.textContent = code;
+	(document.head||document.documentElement).appendChild(s);
 }

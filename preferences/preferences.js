@@ -60,8 +60,13 @@ var settings = [
 		description: "Disable wakeup pop-up?",
 		type: "checkbox",
 		defaultValue: "true"
+	},{
+		id: "toogle_zoom_enabler",
+		name: "Zoom posts shortcut",
+		description: "Toogle post zoom pressing 'z' key?",
+		type: "checkbox",
+		defaultValue: "true"
 	}
-
 ];
 
 // var settings = [
