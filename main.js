@@ -51,6 +51,35 @@ function setLongPostListener(){
 		});
 		
 	}
+	if( settings.long_post_visualization == "Inline" && settings.long_post_visualization_enabler){
+
+		jQuery("#list-view-2").on( "click", ".badge-evt.post-read-more", function( event ) {
+			event.preventDefault();
+			
+			post = jQuery(event.target);
+
+			
+			var image = post.parents('article').find("img");
+
+			jQuery.get( post.attr('href'), function(content) {
+				image.attr("src", jQuery(content).find('.badge-item-img').attr("src"));
+			});
+			$(window).bind('scroll', post.parents('article').first(), function(event){
+				console.log(event);
+				console.log(event.data.offset());
+				if($(window).scrollTop() > (event.data.offset().top + event.data.height())) {
+					console.log('out');
+					$(window).unbind('scroll');
+				}
+			});
+
+		});
+
+		jQuery(document).on('scroll', function(){
+			closeSidebar();
+		});
+		
+	}
 
 }
 
@@ -251,14 +280,47 @@ function showNSFWPost(e){
 	}else{
 		e.find(".badge-nsfw-entry-cover").addBack(".badge-nsfw-entry-cover").each(function() {
 			var tmp = jQuery(this);
-			if (!tmp.hasClass("badge-evt")){
-				tmp.click(function(e){e.preventDefault();});
-				tmp.addClass("badge-post-zoom zoomable").removeClass("badge-nsfw-entry-cover");
-			}
 			tmp.addClass("deobfuscated");
 			var imageSource = "http://img-9gag-fun.9cache.com/photo/" + tmp.parents("article").data("entry-id") + "_460s.jpg";
 			// TODO: isn't enough a string instead of a jquery object?
 			tmp.html( jQuery('<img/>', { src: imageSource } ));
+			//TODO: show NSFW gif
+//			tmp.find('img').hide();
+//			var video = jQuery('<video preload="auto" poster="http://img-9gag-fun.9cache.com/photo/' + tmp.parents("article").data("entry-id") + '_460s.jpg" loop/>');
+//			if (!tmp.hasClass("badge-evt")){
+//				video.width("600px");
+//			}else{
+//				video.width("500px");
+//			}
+//			tmp.addClass("badge-animated-cover badge-track badge-track-no-follow");
+//			divvo = jQuery('<div/>').addClass("badge-animated-container-animated");
+//			divvo.append(video);
+//			divvo.append('<div class="badge-animated-container-static gif-post presenting">\
+//            <img class="badge-item-img" src="http://img-9gag-fun.9cache.com/photo/aw7VWyQ_460s.jpg" alt="No diving zone" style="visibility: hidden;">\
+//                        <span class="play badge-gif-play badge-auto-clicked">GIF</span>\
+//        </div>');
+//        	tmp.append(divvo);
+//			video.append('<source/>').error(function() {
+//				// video not found, restore img
+//				video.parents('div.badge-animated-container-animated').remove();
+//				tmp.find('img').show();
+//				tmp.removeClass("badge-animated-cover badge-track badge-track-no-follow");
+//				if (!tmp.hasClass("badge-evt")){
+//					tmp.click(function(e){e.preventDefault();});
+//					tmp.addClass("badge-post-zoom zoomable").removeClass("badge-nsfw-entry-cover");
+//				}
+//			}).attr('src', 'http://img-9gag-fun.9cache.com/photo/' + tmp.parents("article").data("entry-id") + '_460sv.mp4', 'type', 'video/mp4');
+//        	video.click(function(){
+//				if (this.paused == false) {
+//					this.pause();
+//				} else {
+//					this.play();
+//				}
+//			});
+//			divvo.click(function(e){
+//				e.stopPropagation();
+//				e.preventDefault();}
+//			);
 		});
 	}
 }
