@@ -7,7 +7,7 @@ function setupVideoObject(){
 	};
 }
 
-// not actually working:
+
 function getSettings( setting ){
 	var value = chrome.storage.sync.get( setting, function(obj){
 		settings =  obj;

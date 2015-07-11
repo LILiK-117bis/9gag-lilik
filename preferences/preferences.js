@@ -240,8 +240,11 @@ function updateSettings( storedSettings ){
 		var type = settingObject.getAttribute('data-type');
 
 		var settingValue = settings[i].defaultValue;
+
+		var usedDefault = true;
 		if( storedSettings[ settingId ] ){
 			settingValue = storedSettings[settingId];
+			usedDefault = false;
 		}
 		switch( type ){
 			case ( "checkbox" ):
@@ -260,17 +263,12 @@ function updateSettings( storedSettings ){
 				settingObject.childNodes[1].childNodes[0].value = settingValue;
 			break;
 		}
+		if( usedDefault ){
+			saveSettings.call( displayedSettings[i] );
+		}
 
 	};
-	// for( var settingId in storedSettings ){
-	// 	settingId = String( settingId );
-
-	// 	settingObject = document.getElementById( "setting_"+settingId );
-	// 	if( typeof settingObject != "undefined" && settingObject != null){
-
-			
-	// 	}
-	// }
+	
 	
 }
 
