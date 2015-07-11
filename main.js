@@ -352,6 +352,7 @@ function showVideoControlsPost(e){
 }
 
 function toogleZoom(){
+	// TODO: comment and rewrite ammodo
 	if (settings.toogle_zoom_enabler) {
 		$('html').keydown(function(e){
 			switch (e.keyCode){
