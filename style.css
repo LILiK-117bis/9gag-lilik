@@ -13,6 +13,13 @@ header#top-nav a.logo{
 #container.night img, #container.night video{
 	-webkit-filter: invert(100%);
 }
+section.section-header.night{
+	 background-color: white;
+	 -webkit-filter: invert(100%);
+}
+section.section-header.night img, #container.night video{
+	-webkit-filter: invert(100%);
+}
 #sidebar-content-mod{
 	overflow-y: scroll;
 	float: left;
@@ -36,6 +43,7 @@ header#top-nav a.logo{
 #sidebar-content-mod.closed, .closed{
 	width: 0px;
 	background: none;
+	display: none;
 
 }
 /*comments*/

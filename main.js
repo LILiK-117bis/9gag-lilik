@@ -5,7 +5,6 @@ function setupVideoObject(){
 		name: null,
 		permalink: null
 	};
-
 }
 
 // not actually working:
@@ -48,15 +47,18 @@ function setLongPostListener(){
 		});
 
 		jQuery(document).on('scroll', function(){
-
-			var sidebar = jQuery("#sidebar-content-mod");
-			if( !sidebar.hasClass('closed') ){
-				sidebar.addClass('closed');
-			}
+			closeSidebar();
 		});
 		
 	}
 
+}
+
+function closeSidebar(){
+			var sidebar = jQuery("#sidebar-content-mod");
+			if( !sidebar.hasClass('closed') ){
+				sidebar.addClass('closed');
+			}
 }
 
 function setupSidebar(){
@@ -64,6 +66,26 @@ function setupSidebar(){
 		
 		jQuery("#container").after("<div id='sidebar-content-mod' class='closed'></div>");
 		var menuHeight = jQuery("#top-nav").height();
+		$('html').keydown(function(e){
+			var sidebar = jQuery("#sidebar-content-mod");
+			if (sidebar.is(':visible')){
+				switch (e.keyCode){
+					case 38:
+						sidebar.scrollTop(sidebar.scrollTop()-20);
+						e.preventDefault();
+						break;
+					case 40:
+						sidebar.scrollTop(sidebar.scrollTop()+20);
+						e.preventDefault();
+						break;
+				}
+				var img = sidebar.find('img');
+				console.log(img.height(), -img.offset().top + parseInt(sidebar.css('top'),10));
+				if(img.height() <= -img.offset().top + parseInt(sidebar.css('top'),10)){
+					closeSidebar();
+				}
+			}
+		});
 
 	}
 	var pageHeight = jQuery(window).height();
@@ -73,14 +95,11 @@ function setupSidebar(){
 
 //clean wake up overlay
 function cleanWakeUp(){
-
-	//	jQuery('head').append('<script type="text/javascript">GAG.Configs._configs.configs.idlePopupIdleTime = 9007199254740991; clearTimeout(GAG.PageController._idlePopupTimer); </script>');
-	// 31556926000 = 1 year in ms.
-	var code = ['GAG.Configs._configs.configs.idlePopupIdleTime = 31556926000; clearTimeout(GAG.PageController._idlePopupTimer);'].join('\n');
-	var script = document.createElement('script');
-	script.textContent = code;
-	(document.head||document.documentElement).appendChild(script);
-	script.parentNode.removeChild(script);
+	var code = 'GAG.Configs._configs.configs.idlePopupIdleTime = 2147483647; clearTimeout(GAG.PageController._idlePopupTimer);';
+	var s = document.createElement('script');
+	s.type = "text/javascript";
+	s.textContent = code;
+	(document.head||document.documentElement).appendChild(s);
 }
 
 //set a listener to videos right click
@@ -110,8 +129,14 @@ function setVideoListener(){
 }
 
 function setOnNewNodeListener(){
-	jQuery(".main-wrap").on("DOMNodeInserted", function() {
-		NSFWListener();
+	jQuery(".main-wrap").on("DOMNodeInserted", function(e) {
+		if ( !updatingDom ){
+			updatingDom = true;
+			var element = jQuery(e.target);
+			showNSFWPost(element);
+			showVideoControls(element);
+			updatingDom = false;
+		}
 	});
 }
 function setOnWindowResizeListener(){
@@ -137,7 +162,6 @@ function enableSoftTransitions( element ){
 
 //night mode
 function nightMode(){
-	console.dir(settings.night_mode_enabler);
 	if( hasComments())
 		setInvertCommentImages();
 
@@ -178,6 +202,7 @@ function toggleNight( command ){
 
 	nightClass = "night";
 	var container = jQuery('#container');
+	var sectionHeader = jQuery('section.section-header');
 
 	if( hasComments())
 		var commentPosts = frames['gcomment-widget-jsid-comment-sys'].document.getElementsByClassName("post-comment")[0];
@@ -187,11 +212,13 @@ function toggleNight( command ){
 		switch( command ){
 			case 'on':
 				container.addClass( nightClass );
+				sectionHeader.addClass( nightClass );
 					if( hasComments())
 						addClass( commentPosts, nightClass );
 			break;
 			case 'off':
 				container.removeClass( nightClass );
+				sectionHeader.removeClass( nightClass );
 					if( hasComments())
 						removeClass( commentPosts, nightClass );
 
@@ -218,22 +245,47 @@ function setInvertCommentImages(){
 
 }
 
-function showNSFW(){
-	jQuery(".badge-nsfw-entry-cover").each(function() {
-		jQuery(this).addClass("deobfuscated");
-
-		var imageSource = "http://img-9gag-fun.9cache.com/photo/" + jQuery(this).parents("article").data("entry-id") + "_460s.jpg";
-		
-		// TODO: isn't enough a string instead of a jquery object?
-		jQuery(this).html( jQuery('<img/>', { src: imageSource } ));
-	});
+function showNSFWPost(e){
+	if (e == undefined ){
+		jQuery(".badge-nsfw-entry-cover").each(function() {
+			showNSFWPost(jQuery(this));
+		});
+	}else{
+		e.find(".badge-nsfw-entry-cover").addBack(".badge-nsfw-entry-cover").each(function() {
+			var tmp = jQuery(this);
+			if (!tmp.hasClass("badge-evt")){
+				tmp.click(function(e){e.preventDefault();})
+				tmp.addClass("badge-post-zoom zoomable").removeClass("badge-nsfw-entry-cover");
+			}
+			tmp.addClass("deobfuscated");
+			var imageSource = "http://img-9gag-fun.9cache.com/photo/" + tmp.parents("article").data("entry-id") + "_460s.jpg";
+			// TODO: isn't enough a string instead of a jquery object?
+			tmp.html( jQuery('<img/>', { src: imageSource } ));
+		});
+	}
 }
 
-function NSFWListener(){
-	if ( !jQuery("#jsid-upload-menu").not(".deobfuscated").is(":visible") && !updatingDom ){
-			updatingDom = true;
-			showNSFW();
-			updatingDom = false;
+function showNSFW(e){
+	if ( !jQuery("#jsid-upload-menu").not(".deobfuscated").is(":visible") && settings.nsfw_enabler){
+			showNSFWPost(e);
+	}
+}
+
+function showVideoControls(e){
+	if ( settings.video_controls_enabler ){
+			showVideoControlsPost(e);
+	}
+}
+
+function showVideoControlsPost(e){
+	if (e == undefined ){
+		jQuery("video").each(function() {
+			showVideoControlsPost(jQuery(this));
+		});
+	}else{
+		e.each(function() {
+			jQuery(this).find("video").addBack("video").attr('controls',true);
+		});
 	}
 }
 //init everything
@@ -241,17 +293,20 @@ function NSFWListener(){
 jQuery(document).ready(function() {
 	updatingDom = false;
 	getSettings();
-	
 });
 
 function initExtension(){
 	showNSFW();
+	showVideoControls()
 	
 	setOnNewNodeListener();
 	setOnWindowResizeListener();
 	setLongPostListener();
-	
-	cleanWakeUp();
+
+	if (settings.disable_wakeup_enabler) {
+		cleanWakeUp();
+	}
+
 	// TODO: this object is not in the right place:
 	currentVideo = setupVideoObject();
 	setVideoListener();

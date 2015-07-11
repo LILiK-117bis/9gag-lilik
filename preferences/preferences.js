@@ -34,6 +34,21 @@ var settings = [
 			min: "0",
 			max: "24"
 		} 
+	},{
+		id: "video_controls_enabler",
+		name: "Video controls",
+		description: "Show controls on gif posts to pause or seeking gif?",
+		type: "checkbox",
+	},{
+		id: "nsfw_enabler",
+		name: "Show NSFW",
+		description: "Show NSFW posts without login?",
+		type: "checkbox",
+	},{
+		id: "disable_wakeup_enabler",
+		name: "Wakeup pop-up",
+		description: "Disable wakeup pop-up?",
+		type: "checkbox",
 	}
 
 ];
@@ -182,7 +197,7 @@ function saveSettings(){
 		obj
 	, function(){
 		//callback function after saving the preferences
-		document.getElementById("bar").innerHTML = "Saved the preferences.";
+		document.getElementById("bar").innerHTML = "Preferences saved, refresh 9gag pages to enable new preferences.";
 		
 	});
 	
