@@ -254,7 +254,7 @@ function showNSFWPost(e){
 		e.find(".badge-nsfw-entry-cover").addBack(".badge-nsfw-entry-cover").each(function() {
 			var tmp = jQuery(this);
 			if (!tmp.hasClass("badge-evt")){
-				tmp.click(function(e){e.preventDefault();})
+				tmp.click(function(e){e.preventDefault();});
 				tmp.addClass("badge-post-zoom zoomable").removeClass("badge-nsfw-entry-cover");
 			}
 			tmp.addClass("deobfuscated");
@@ -284,7 +284,9 @@ function showVideoControlsPost(e){
 		});
 	}else{
 		e.each(function() {
-			jQuery(this).find("video").addBack("video").attr('controls',true);
+			jQuery(this).find("video").addBack("video").on('play', function(event) {
+				setTimeout(function(element){jQuery(element).find("video").addBack("video").attr('controls',true);}, 2000, event.target);
+			});
 		});
 	}
 }
@@ -306,6 +308,28 @@ function initExtension(){
 	if (settings.disable_wakeup_enabler) {
 		cleanWakeUp();
 	}
+
+$('html').keydown(function(e){
+	switch (e.keyCode){
+		case 90:
+			if (jQuery("#jsid-modal-post-zoom").is(':visible')){
+				var code = 'jQuery("a.badge-overlay-close.close-button").click();';
+				var s = document.createElement('script');
+				s.type = "text/javascript";
+				s.textContent = code;
+			(document.head||document.documentElement).appendChild(s);
+			}else{
+				var a = jQuery('article.badge-in-view.badge-in-view-focus').first().find('a');
+				a.click(function(e){e.preventDefault();});
+				a.addClass("badge-post-zoom zoomable");
+				a.click();
+//				if (img.hasClass('badge-post-zoom zoomable')){
+//					img.click().removeClass("badge-post-zoom zoomable");
+//				}
+			}
+			break;
+	}
+});
 
 	// TODO: this object is not in the right place:
 	currentVideo = setupVideoObject();
