@@ -280,7 +280,7 @@ function showNSFWPost(e){
 	}else{
 		e.find(".badge-nsfw-entry-cover").addBack(".badge-nsfw-entry-cover").each(function() {
 			var tmp = jQuery(this);
-			tmp.addClass("deobfuscated");
+			tmp.addClass("lilik-deobfuscated");
 			var imageSource = "http://img-9gag-fun.9cache.com/photo/" + tmp.parents("article").data("entry-id") + "_460s.jpg";
 			// TODO: isn't enough a string instead of a jquery object?
 			tmp.html( jQuery('<img/>', { src: imageSource } ));
@@ -326,7 +326,7 @@ function showNSFWPost(e){
 }
 
 function showNSFW(e){
-	if ( !jQuery("#jsid-upload-menu").not(".deobfuscated").is(":visible") && settings.nsfw_enabler){
+	if ( !jQuery("#jsid-upload-menu").not(".lilik-deobfuscated").is(":visible") && settings.nsfw_enabler){
 			showNSFWPost(e);
 	}
 }
